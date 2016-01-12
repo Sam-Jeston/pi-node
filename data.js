@@ -4,7 +4,8 @@ const fs = require('fs');
 const file = 'data.db';
 var exists = fs.existsSync(file);
 
-// Declare date prettifier
+// Declare date prettifier -> Put this somewhere more appropriate, possible
+// a utility module
 function getDateTime() {
   let date = new Date();
   let hour = date.getHours();
@@ -86,5 +87,37 @@ exports.daily_temp = function(callback) {
     callback(null, rows);
     db.close();
     console.log('Daily weather entries retrieved - db connection closed');
+  })
+};
+
+// At intervals of 30 minutes, weekly temp is the last 336 database entries
+exports.weekly_temp = function(callback) {
+  let db = new sqlite3.Database(file);
+
+  let stmt = 'select * from weather order by id desc limit 336';
+  db.all(stmt, [], function(err, rows) {
+    if (err) {
+      callback(err, null);
+    }
+
+    callback(null, rows);
+    db.close();
+    console.log('Weekly weather entries retrieved - db connection closed');
+  })
+};
+
+// At intervals of 30 minutes, last 30 days temp is the last 1440 database entries
+exports.monthly_temp = function(callback) {
+  let db = new sqlite3.Database(file);
+
+  let stmt = 'select * from weather order by id desc limit 1440';
+  db.all(stmt, [], function(err, rows) {
+    if (err) {
+      callback(err, null);
+    }
+
+    callback(null, rows);
+    db.close();
+    console.log('Monthly weather entries retrieved - db connection closed');
   })
 };

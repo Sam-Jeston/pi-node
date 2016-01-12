@@ -11,7 +11,9 @@ const scraper = require('./scraper.js')
 scraper.startScrape();
 
 // Define routes with the express Router
-expRouter.get('/daily', routes.get_daily)
+expRouter.get('/daily', routes.get_daily);
+expRouter.get('/weekly', routes.get_weekly);
+expRouter.get('/monthly', routes.get_monthly);
 
 // Use the express router to mout all routes defined with expRouter
 app.use(expRouter);
