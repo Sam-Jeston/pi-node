@@ -36,7 +36,4 @@ var scrape = function() {
 // Scrape immediately on boot and then every 30 minutes
 exports.startScrape = function() {
   scrape();
-  setInterval(function() {
-    scrape();
-  }, 1800000)
 }

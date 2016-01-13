@@ -8,7 +8,7 @@ var exists = fs.existsSync(file);
 // a utility module
 function getDateTime() {
   let date = new Date();
-  let hour = date.getHours();
+  let hour = date.getHours() + 10;
   hour = (hour < 10 ? "0" : "") + hour;
   let min  = date.getMinutes();
   min = (min < 10 ? "0" : "") + min;
