@@ -2,39 +2,12 @@
 
 const fs = require('fs');
 const file = 'data.db';
+const moment = require('moment');
 var exists = fs.existsSync(file);
 
-// Declare date prettifier -> Put this somewhere more appropriate, possible
-// a utility module
-function getDateTime() {
-  let date = new Date();
-  let hour = date.getHours() + 10;
-  hour = (hour < 10 ? "0" : "") + hour;
-  let min  = date.getMinutes();
-  min = (min < 10 ? "0" : "") + min;
-  let sec  = date.getSeconds();
-  sec = (sec < 10 ? "0" : "") + sec;
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  month = (month < 10 ? "0" : "") + month;
-  let day  = date.getDate();
-  day = (day < 10 ? "0" : "") + day;
-  return day + "/" + month + "/" + year + " " + hour + ":" + min + ":" + sec;
-}
-
-// MAKE ES5 string to get this code to work
-// 'CREATE TABLE `weather` (
-//   `id` INTEGER PRIMARY KEY,
-//   `brisbane` INTEGER,
-//   `sydney` INTEGER,
-//   `melbourne` INTEGER,
-//   `hobart` INTEGER,
-//   `canberra` INTEGER,
-//   `darwin` INTEGER,
-//   `adelaide` INTEGER,
-//   `perth` INTEGER,
-//   `date` BLOB
-// );'
+var createStatment = 'CREATE TABLE `weather` (`id` INTEGER PRIMARY KEY,`brisbane` INTEGER,`sydney` INTEGER, '+
+'`melbourne` INTEGER,`hobart` INTEGER,`canberra` INTEGER,`darwin` INTEGER, '+
+'`adelaide` INTEGER,`perth` INTEGER,`date` BLOB);'
 
 if(!exists) {
   console.log('Creating DB file.');
@@ -47,15 +20,14 @@ exports.record_temp = function(cityTemps) {
   let db = new sqlite3.Database(file);
 
   db.serialize(function() {
-    // if(!exists) {
-    //   db.run(createStatment);
-    // }
+    if(!exists) {
+      db.run(createStatment);
+    }
     
     let stmt = db.prepare('INSERT INTO weather (brisbane, sydney, melbourne, hobart, ' +
     'canberra, darwin, adelaide, perth, date) ' +
     'VALUES (?,?,?,?,?,?,?,?,?)');
-    
-    // Ignore capitilization here - Lazy programming is all
+
     stmt.run(
       cityTemps.Brisbane,
       cityTemps.Sydney,
@@ -65,7 +37,7 @@ exports.record_temp = function(cityTemps) {
       cityTemps.Darwin,
       cityTemps.Adelaide,
       cityTemps.Perth,
-      getDateTime()
+      new Date()
     )
     
     stmt.finalize();
