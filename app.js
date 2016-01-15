@@ -9,6 +9,12 @@ const scraper = require('./scraper.js')
 const CronJob = require('cron').CronJob;
 
 // Start scrape of weather data
+// Interval watcher required to keep app active, run once a minute
+var wake = function() {
+  console.log('app on watch');
+};
+setInterval(function() { wake(); }, 60000);
+
 new CronJob('*/30 * * * *', function() {
     console.log('Weather scrape cron job started');
     scraper.startScrape();
