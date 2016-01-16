@@ -67,7 +67,8 @@ exports.record_temp = function(cityTemps) {
   });
 };
 
-// At intervals of 30 minutes, daily temp is the last 48 database entries
+// We are scraping data at 30 minute intervals. To return data for every hour, 
+// we will only return ids divisible by 2
 exports.daily_temp = function(callback) {
   newDb(function(err, db) {
     if (err) {
@@ -75,7 +76,7 @@ exports.daily_temp = function(callback) {
       return;
     }
 
-    let stmt = 'select * from weather order by id desc limit 48';
+    let stmt = 'select * from weather where id%2 = 0 order by id desc limit 24';
     db.all(stmt, [], function(getErr, rows) {
       if (getErr) {
         callback(getErr, null);
@@ -89,7 +90,7 @@ exports.daily_temp = function(callback) {
   });
 };
 
-// At intervals of 30 minutes, weekly temp is the last 336 database entries
+// Return entries at 6 entries a day, so 42 entries a week
 exports.weekly_temp = function(callback) {
   newDb(function(err, db) {
     if (err) {
@@ -97,7 +98,7 @@ exports.weekly_temp = function(callback) {
       return;
     }
 
-    let stmt = 'select * from weather order by id desc limit 336';
+    let stmt = 'select * from weather where id%8 = 0 order by id desc limit 42';
     db.all(stmt, [], function(err, rows) {
       if (err) {
         callback(err, null);
@@ -110,7 +111,7 @@ exports.weekly_temp = function(callback) {
   });
 };
 
-// At intervals of 30 minutes, last 30 days temp is the last 1440 database entries
+// Return entries at 2 entries a day, so 60 entries a month
 exports.monthly_temp = function(callback) {
   newDb(function(err, db) {
     if (err) {
@@ -118,7 +119,7 @@ exports.monthly_temp = function(callback) {
       return;
     }
 
-    let stmt = 'select * from weather order by id desc limit 1440';
+    let stmt = 'select * from weather where id%24 = 0 order by id desc limit 60';
     db.all(stmt, [], function(err, rows) {
       if (err) {
         callback(err, null);
