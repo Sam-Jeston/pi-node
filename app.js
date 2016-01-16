@@ -15,19 +15,19 @@ var wake = function() {
 };
 setInterval(function() { wake(); }, 60000);
 
-new CronJob('*/30 * * * *', function() {
-    console.log('Weather scrape cron job started');
-    scraper.startScrape();
-}, null, true, 'Australia/Brisbane');
+var scrapeTimer = function() {
+  scraper.startScrape();
+}
+setInterval(function() { scrapeTimer(); }, 1800000);
 
 // Define routes with the express Router
 expRouter.get('/api/daily', routes.get_daily);
 expRouter.get('/api/weekly', routes.get_weekly);
 expRouter.get('/api/monthly', routes.get_monthly);
 
-// Allow port 3010 for dev purposes
+// Allow CORS for dev purposes. Does not effect production
 app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3010');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
 
