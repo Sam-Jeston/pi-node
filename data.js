@@ -36,7 +36,7 @@ if(!exists) {
   })
 }
 
-exports.record_temp = function(cityTemps) {
+exports.recordTemp = function(cityTemps) {
   newDb(function(err, db) {
     if(err) {
       console.log(err);
@@ -69,7 +69,7 @@ exports.record_temp = function(cityTemps) {
 
 // We are scraping data at 30 minute intervals. To return data for every hour, 
 // we will only return ids divisible by 2
-exports.daily_temp = function(callback) {
+exports.dailyTemp = function(callback) {
   newDb(function(err, db) {
     if (err) {
       callback(err, null);
@@ -91,7 +91,7 @@ exports.daily_temp = function(callback) {
 };
 
 // Return entries at 6 entries a day, so 42 entries a week
-exports.weekly_temp = function(callback) {
+exports.weeklyTemp = function(callback) {
   newDb(function(err, db) {
     if (err) {
       callback(err, null);
@@ -112,7 +112,7 @@ exports.weekly_temp = function(callback) {
 };
 
 // Return entries at 2 entries a day, so 60 entries a month
-exports.monthly_temp = function(callback) {
+exports.monthlyTemp = function(callback) {
   newDb(function(err, db) {
     if (err) {
       callback(err, null);

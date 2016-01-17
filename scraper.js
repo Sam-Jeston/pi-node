@@ -6,7 +6,8 @@ const db = require('./data.js');
 
 var scrape = function() {
   let url = 'http://www.weatherzone.com.au/';
-  let json = {}
+  let json = {};
+  let current = {};
 
   request(url, function(error, response, html){
     if(error) {
@@ -21,14 +22,15 @@ var scrape = function() {
 
       const cities = ['Brisbane', 'Sydney', 'Canberra', 'Melbourne', 'Hobart', 'Darwin', 'Adelaide', 'Perth']
 
-      // Fat arrow ES2015 sytax. Not sure why ${} string concat wasnt working
       cities.forEach(cit => {
         let current_city = data.find('a:contains(\'' + cit + '\')');
         json[cit] = current_city.parent().parent().find('.now').text();
+        current[cit] = current_city.parent().parent().next('tr').find('.location-name').children().html();
       })
 
-      db.record_temp(json);
-      console.log('Weather scrape completed')
+      db.recordTemp(json);
+      exports.currentConditions = current; 
+      console.log('Weather scrape completed');
     })
   })
 };
@@ -37,3 +39,6 @@ var scrape = function() {
 exports.startScrape = function() {
   scrape();
 }
+
+// Defind null for currentConditions until it is redefined
+exports.currentConditions = {};

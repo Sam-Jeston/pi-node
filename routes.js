@@ -1,9 +1,10 @@
 'use strict';
 
 const db = require('./data.js');
+const scraper = require('./scraper.js');
 
-exports.get_daily = function(req, res) {
-  db.daily_temp(function(err, success) {
+exports.getDaily = function(req, res) {
+  db.dailyTemp(function(err, success) {
     if(err) {
       console.log(err);
       res.send(err);
@@ -15,8 +16,8 @@ exports.get_daily = function(req, res) {
   })
 };
 
-exports.get_weekly = function(req, res) {
-  db.weekly_temp(function(err, success) {
+exports.getWeekly = function(req, res) {
+  db.weeklyTemp(function(err, success) {
     if(err) {
       console.log(err);
       res.send(err);
@@ -28,8 +29,8 @@ exports.get_weekly = function(req, res) {
   })
 };
 
-exports.get_monthly = function(req, res) {
-  db.monthly_temp(function(err, success) {
+exports.getMonthly = function(req, res) {
+  db.monthlyTemp(function(err, success) {
     if(err) {
       console.log(err);
       res.send(err);
@@ -40,3 +41,7 @@ exports.get_monthly = function(req, res) {
     }
   })
 };
+
+exports.currentConditions = function(req, res) {
+  res.send(scraper.currentConditions);
+}

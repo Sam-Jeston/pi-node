@@ -6,7 +6,6 @@ const app = express();
 const expRouter = express.Router();
 const routes = require('./routes.js');
 const scraper = require('./scraper.js')
-const CronJob = require('cron').CronJob;
 
 // Start scrape of weather data
 // Interval watcher required to keep app active, run once a minute
@@ -21,9 +20,10 @@ var scrapeTimer = function() {
 setInterval(function() { scrapeTimer(); }, 1800000);
 
 // Define routes with the express Router
-expRouter.get('/api/daily', routes.get_daily);
-expRouter.get('/api/weekly', routes.get_weekly);
-expRouter.get('/api/monthly', routes.get_monthly);
+expRouter.get('/api/daily', routes.getDaily);
+expRouter.get('/api/weekly', routes.getWeekly);
+expRouter.get('/api/monthly', routes.getMonthly);
+expRouter.get('/api/current', routes.currentConditions);
 
 // Allow CORS for dev purposes. Does not effect production
 app.use(function(req, res, next) {
@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-// Use the express router to mout all routes defined with expRouter
+// Use the express router to mount all routes defined with expRouter
 app.use(expRouter);
 
 // Boot the server on port 3000
